@@ -1,0 +1,12 @@
+masm_build_asm -p build_asm1.params
+masm_build_asm -p build_asm2.params
+masm_make_asm_series -p make_asm_series.params -o face_series.masm
+
+masm_draw_mean_model -p draw_mean_model.params
+
+masm_test_search -p test_search_on_trn.params
+masm_test_search -p test_search.params
+
+# To explore shape models:
+msm_build_shape_model -p build_shape_model.params
+msm_draw_shape_modes -p draw_shape_modes.params

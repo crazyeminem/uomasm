@@ -1,0 +1,12 @@
+curves: {
+  curve:  { name: Chin open: true indices: { 0:14 } } 
+  curve:  { name: LEyebrow open: false indices: { 15:20 } } 
+  curve:  { name: REyebrow open: false indices: { 21:26 } } 
+  curve:  { name: LEye open: false indices: { 27:30 } } 
+  curve:  { name: REye open: false indices: { 32:35 } } 
+  curve:  { name: Nose open: true indices: { 37:45 } } 
+  curve:  { name: Nostrils open: true indices: { 46 47 } } 
+  curve:  { name: OuterLips open: false indices: { 48:59 } } 
+  curve:  { name: TopLip open: true indices: { 48 60 61 62 54 } } 
+  curve:  { name: BottomLip open: true indices: { 54 63 64 65 48 } } 
+}

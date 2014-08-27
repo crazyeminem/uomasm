@@ -1,0 +1,58 @@
+//: File to save model to
+asm_path: face2.masm
+
+asm_builder: {
+  //: Aligner for shape model, defining form of pose transformation 
+  aligner: msm_similarity_aligner
+
+  //: Object to apply limits to parameters
+  param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
+
+  // Maximum number of shape modes
+  max_modes: 99
+
+  // Proportion of shape variation to explain
+  var_prop: 0.95
+
+  // Path to file defining the lines connecting the model points (and thus orientations)
+  curves_path: ./face_68pts.crvs
+
+  // Sampling step size is set so that there are frame_width such steps across the mean shape.
+  frame_width: 80
+
+  // Define the type of builder for the local models
+  finder_builders: { 
+    default_builder: masm_ncc_finder_builder { ni: 7 nj: 7 search_ni: 11 search_nj: 3 }
+    // Define alternative parameter values for some of the points (eg points 0,1, 4-7 and 14)
+    override_params: {
+      params: { index: { 31 36 } data: { ni: 9 nj: 9 } }
+    }
+  }
+}
+
+//: Define renumbering required under reflection
+//  If defined, a reflected version of each shape is included in build
+// reflection_symmetry: { 1 0  3 2   7 6 5 4  13 12 11 10 9 8  14  16 15 17 18 19   21 20   23 22  26 27  24 25 }
+
+// Use both original and the reflection
+only_reflect: false
+
+image_dir: ../images/
+points_dir: ../points_68/
+images: {
+  107_0764.pts : 107_0764.jpg
+  107_0766.pts : 107_0766.jpg
+  107_0779.pts : 107_0779.jpg
+  107_0780.pts : 107_0780.jpg
+  107_0781.pts : 107_0781.jpg
+  107_0782.pts : 107_0782.jpg
+  107_0784.pts : 107_0784.jpg
+  107_0785.pts : 107_0785.jpg
+  107_0786.pts : 107_0786.jpg
+  107_0787.pts : 107_0787.jpg
+  107_0788.pts : 107_0788.jpg
+  107_0789.pts : 107_0789.jpg
+  107_0790.pts : 107_0790.jpg
+  107_0791.pts : 107_0791.jpg
+  107_0792.pts : 107_0792.jpg
+}

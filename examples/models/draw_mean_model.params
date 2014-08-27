@@ -1,0 +1,17 @@
+//: File to load model from
+asm_path: face2.masm
+
+curves_path: face_68pts.crvs
+
+//: Radius of points to display (if less than zero, then don't draw points)
+point_radius: 2
+
+line_colour: black
+point_colour: red
+local_model_colour: black
+
+// Approximate width of region to display shape
+width: 100
+
+eps_path: face_asm1_mean.eps
+

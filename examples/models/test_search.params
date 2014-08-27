@@ -1,0 +1,32 @@
+asm_path: face_series.masm
+
+curves_path: face_68pts.crvs
+
+// Index of ref point 0, 1 defining reference length.
+ref_pt0_index: 0   ref_pt1_index: 1
+
+// Directory to save the final points to, or "-" if to be ignored.
+output_points_dir: -
+
+//: Defines which points are initialised from initial_points.
+//  If initial_pt_index[i]>=0, then initialise using points[initial_pt_index[i]]=initial_points[i]
+//  If empty, then use all points
+initial_pt_index: {  }
+
+
+// Directory containing images
+image_dir: ../images/
+
+// Directory containing `true' points
+points_dir: ../points_68/
+
+// Directory containing points used to initialise the model
+initial_points_dir: ../points_68/
+
+images: {
+  107_0793.pts : 107_0793.jpg
+  107_0794.pts : 107_0794.jpg
+  107_0795.pts : 107_0795.jpg
+  107_0798.pts : 107_0798.jpg
+  107_0799.pts : 107_0799.jpg
+}

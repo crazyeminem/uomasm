@@ -1,0 +1,8 @@
+// Directory for the models
+model_dir: ./
+
+// List of built models
+model_files: {
+  face1.masm
+  face2.masm
+}
