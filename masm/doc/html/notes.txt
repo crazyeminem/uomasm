@@ -1,0 +1,16 @@
+Pages for the website.
+Upload using the following commands:
+
+sftp timcootes,uomasm@web.sourceforge.net
+cd htdocs
+put index.html
+
+etc
+
+
+Useful overview page:
+http://www.software.ac.uk/resources/guides/how-create-and-manage-sourceforge-projects?mpw
+
+Note, may move this doc directory to uomasm root directory.
+Add some pictures eventually.
+Add a tutorial.
