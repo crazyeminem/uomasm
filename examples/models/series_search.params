@@ -1,0 +1,27 @@
+// Parameter file for masm_series_search
+
+asm_path: face_series.masm
+
+curves_path: face_68pts.crvs
+
+
+// Width of output image (input will be scaled to this)
+//  If zero, don't generate output images
+out_image_width: 256
+
+// Directory to save output frames to
+output_dir: ./asm_results/
+
+// Directory to save the final points to
+output_points_dir: ./asm_points/
+
+// Directory containing images
+image_dir: ../images/
+
+// Directory containing `true' points
+points_dir: ../points_68/
+
+images: {
+  107_0793.jpg
+  107_0794.jpg
+}
