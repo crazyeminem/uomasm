@@ -1,0 +1,39 @@
+Design notes and things to do
+-----------------------------
+
+Q: Should the finders store their own step_size, or should that be defined in the pose?
+  - Key issue is whether different points may require different step sizes - never needed that yet.
+  A: No.
+
+Q: How should RoI for search be defined?
+  - Fixed search region defined in the model in local units?
+  - World RoI passed in though search()?
+  - World RoI passed in though a separate function?  
+
+Q: Have a separate class for finding sets of points (which would allow dynamic programming?)
+  - No, keep it simple.  If necessary have a separate ASM class to do that.
+
+ToDo:
+  - Fit quad fn to local values?
+  - Allow is_1D variant?
+  - Complete the documentation
+  - Linear regression finder:
+    - Compute fit value?
+    - Add step value so only sample sparsely
+    - Compute weight mat properly (not axis aligned)
+    - Allow 1D variant which only predicts along i-axis.
+
+masm_searcher:
+- Add scaling factor for when prior used in fit_to_points* to allow for different weighting of prior vs local model response wt_mats?
+- Arrange that update computes movement, and search stops if movement below a threshold?
+- Store curves within the ASM?
+
+Tidy up tools/masm_search_image
+ - Flags to set colours etc
+
+ToDo:
+- Add flag to masm_sample_grad_region to tweak normalisation.
+
+Current experiments suggest that NCC local models outperform region_pdf models by some margin on faces (training on aflw, testing on bioid).
+
+
