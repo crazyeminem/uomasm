@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>UoMASM: How to Install</title>
+</head>
+<body>
+<h2>How to Install UoMASM in Unix/Linux</h2>
+
+<h3>1) Get VXL</h3>
+Ensure that you have an up to date version of
+<a href="http://vxl.sourceforge.net/">VXL</a>,
+preferably obtaining the source code from git. See <a href="http://sourceforge.net/p/vxl/wiki/Git/">here</a>.<br>
+This can be anywhere, but you might put it in:
+<tt><pre>
+fred/code/vxl
+</pre></tt>
+
+Basically, from within that directory:
+
+<tt><pre>
+git clone http://git.code.sf.net/p/vxl/git vxl
+mkdir obj
+cd obj
+cmake ../vxl
+</pre></tt>
+Then edit the CMakeCache.txt file as appropriate.<br>
+For uomasm you need to have "BUILD_MUL ON".
+For developing set CMAKE_BUILD_TYPE RelWithDebug<br>
+
+Then run "make" again to build everything.<br>
+
+
+I usually end up with a structure like this:
+<tt><pre>
+fred/code/vxl/vxl  - The source code
+fred/code/vxl/obj  - The compiled code
+</pre></tt>
+
+<h3>2a) Simple Approach: Install into the VXL source tree</h3>
+The simplest thing is to install uomasm into the root of the vxl directory.<br>
+So in the above directory tree:
+<tt><pre>
+cd fred/code/vxl/vxl
+git clone git://git.code.sf.net/p/uomasm/code uomasm
+</pre></tt>
+Then edit the CMakeList.txt file within vxl, adding the line
+
+<tt><pre>
+SUBDIR(uomasm)
+</pre></tt>
+near the end.<br>
+Then just go into the obj directory and run make.<br>
+This should automatically set up and compile all of uomasm (into the directory obj/uomasm).
+
+<h3>2b) Alternative approach: Modules in a separate directory tree</h3>
+<h4>i) Create directories</h4>
+Create a new directory to contain your new modules, eg
+<tt><pre>
+fred/code/vxl_modules
+</pre></tt>
+Within this create a src and obj directory for the source code and the compiled code:
+<tt><pre>
+fred/code/vxl_modules/src
+fred/code/vxl_modules/obj
+</pre></tt>
+
+<h4>ii) Download uomasm</h4>
+Download the uomasm package into the directory <tt>fred/code/vxl_modules/src</tt>:<br>
+<tt><pre>
+cd fred/code/vxl_modules/src
+git clone git://git.code.sf.net/p/uomasm/code uomasm
+</pre></tt>
+
+<h4>iii) Create a new CMakeLists.txt</h4>
+Add a CMakeLists.txt file to vxl_modules/src.<br>
+A minimal example would be something like this:
+
+<tt><pre>
+cmake_minimum_required(VERSION 2.6)
+
+PROJECT( MyVXLProjects )
+FIND_PACKAGE(VXL)
+OPTION(BUILD_SHARED_LIBS "Build with shared libraries." ON)
+IF(VXL_FOUND)
+  INCLUDE(${VXL_CMAKE_DIR}/UseVXL.cmake)
+  SET(MODULE_PATH ${VXL_CMAKE_DIR})
+  
+  SUBDIRS(uomasm)
+ENDIF(VXL_FOUND)
+</pre></tt>
+<h4>iv) Compile it</h4>
+This requires several steps.<br>
+First go into vxl_modules/obj and run <tt>cmake ../src</tt>.<br>
+This will set up an initial CMakeCache.txt, but will stop saying it doesn't know
+about VXL.<br>
+Edit the CMakeCache.txt to set the VXL_DIR to the object directory for VXL.<br>
+For instance:
+<tt><pre>
+//The directory containing a CMake configuration file for VXL.
+VXL_DIR:PATH=/home/fred/code/vxl/obj
+</pre></tt>
+Then re-run make - and all should be created.
+
+</body>
+</html>
+
