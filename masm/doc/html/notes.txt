@@ -12,5 +12,4 @@ Useful overview page:
 http://www.software.ac.uk/resources/guides/how-create-and-manage-sourceforge-projects?mpw
 
 Note, may move this doc directory to uomasm root directory.
-Add some pictures eventually.
 Add a tutorial.
