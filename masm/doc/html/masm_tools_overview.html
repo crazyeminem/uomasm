@@ -1,0 +1,313 @@
+<html>
+<head>
+<title>masm/tools: Active Shape Model tools</title>
+</head>
+<body>
+<h1>masm/tools: Active Shape Model tools</h1>
+The <tt>masm/tools</tt> directory contains tools allowing one to build, display and use
+2D Active Shape Models (ASM).<br>
+The ASM is an algorithm to match statistical shape models to image - or rather, to find a set of model points on an image with positions constrained by a statistical shape model.<br>
+For an example of using the tools, see the <tt>uomasm/examples</tt> directory. That contains
+images, points and parameter files to demonstrate building and using a simple
+face model.<br>
+
+<ul>
+<li><a href="#masm_algorithm">The Basic Algorithm</a>
+<li><a href="#masm_building">Building an ASM</a>
+  <ul>
+  <li><a href="#masm_point_finders">Options for local models (masm_point_finder classes)</a>
+  </ul>
+<li><a href="#masm_seq_building">Building sequences of ASMs</a>
+<li><a href="#masm_draw_mean_model">Displaying the mean model</a>
+<li><a href="#masm_seq_search_image">Searching images with an ASM</a>
+<li><a href="#masm_test_search">Testing performance of an ASM</a>
+</ul>
+
+<h2><a name="masm_algorithm">The Basic Algorithm</h2>
+Given a shape model instance defining the initial position of a set of model points on an image,
+the basic ASM algorithm iterates the following steps:
+
+<ul>
+<li> Search around each point with a local model to find the best local position of that point
+<li> Optimise the shape and pose parameters to best fit to the new point positions
+</ul>
+
+<h2><a name="masm_building">Building an ASM</h2>
+A single ASM can be built using the <tt>masm_build_asm</tt> tool.<br>  
+This reads in a text parameter file defining how the ASM is to be built, and what data is to be used.<br>
+Typical useage:
+<tt><pre>
+  masm_build_asm -p build_asm1.params
+</pre></tt>
+
+where <tt>build_asm1.params</tt> is a text file such as:
+<tt><pre>
+//: File to save model to
+asm_path: face1.masm
+
+asm_builder: {
+  //: Aligner for shape model, defining form of pose transformation 
+  aligner: msm_similarity_aligner
+
+  //: Object to apply limits to parameters
+  param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
+
+  // Maximum number of shape modes
+  max_modes: 99
+
+  // Proportion of shape variation to explain
+  var_prop: 0.95
+
+  // Path to file defining the lines connecting the model points (and thus orientations)
+  curves_path: /data/images/faces/tfc_train1/models/face_28pts.crvs
+
+  // Sampling step size is set so that there are frame_width such steps across the mean shape.
+  frame_width: 40
+
+  // Define the type of builder for the local models
+  finder_builders: { 
+    default_builder: masm_ncc_finder_builder { ni: 7 nj: 7 search_ni: 11 search_nj: 3 }
+    // Define alternative parameter values for some of the points (eg points 0,1, 4-7 and 14)
+    override_params: {
+      params: { index: 14 data: { ni: 13 nj: 13 } } 
+      params: { index: { 0 1 } data: { ni: 9 nj: 9 } }
+      params: { index: { 4 : 7 } data: { ni: 11 nj: 11 } }
+    }
+  }
+}
+
+//: Define renumbering required under reflection
+//  If defined, a reflected version of each shape is included in build
+reflection_symmetry: { 1 0  3 2   7 6 5 4  13 12 11 10 9 8  14  16 15 17 18 19   21 20   23 22  26 27  24 25 }
+
+// Use both original and the reflection
+only_reflect: false
+
+image_dir: /data/images/faces/tfc_train1/images/
+points_dir: /data/images/faces/tfc_train1/points_28/
+images: {
+a_image_0001.pts : a_image_0001.png
+a_image_0002.pts : a_image_0002.png
+a_image_0005.pts : a_image_0005.png
+a_image_0007.pts : a_image_0007.png
+a_image_0008.pts : a_image_0008.png
+a_image_0010.pts : a_image_0010.png
+a_image_0020.pts : a_image_0020.png
+a_image_0025.pts : a_image_0025.png
+}
+</pre></tt>
+
+See below for more details of alternative local models.
+
+
+
+<h3><a name="masm_point_finders">Choice of Point Finders</h3>
+A variety of objects (<tt>masm_point_finder</tt>) are available to locate the position of the model points, given an initial estimate.<br>
+Which is to be used can be defined in the parameter file by selecting builder in the finder_builders section, for instance:
+
+<tt><pre>
+  // Define the type of builder for the local models
+  finder_builders: { 
+    default_builder: masm_ncc_finder_builder { ni: 7 nj: 7 search_ni: 11 search_nj: 3 }
+  }
+</pre></tt>
+
+Options currently available include:
+<ul>
+<li><a href="#masm_ncc_finder">masm_ncc_finder</a> uses normalised cross correlation to search for best points
+<li><a href="#masm_region_pdf_finder">masm_region_pdf_finder</a> uses a PDF of the distribution of pixel intensities to search.
+<li><a href="#masm_grad_corr_finder">masm_grad_corr_finder</a> uses correlation of gradient information.
+<li><a href="#masm_lin_reg_finder">masm_lin_reg_finder</a> searchs for point using linear regression on patch around current point.
+</ul>
+
+<h3><a name="masm_ncc_finder">masm_ncc_finder</h3>
+Use parameters:
+<tt><pre>
+masm_ncc_finder_builder { ni: 7 nj: 5 search_ni: 11 search_nj: 3 }
+</pre></tt>
+This creates a 7 x 5 box about each point, with a kernel for normalised cross correlation set to the mean of the normalised patches across the training set. The i-direction is typically normal to the boundary at the point, as defined by the curves.<br>
+During search, the model will be scanned over a region [-search_ni,+search_ni]x[-search_nj,+search_nj] about the current position.
+
+<h3><a name="masm_region_pdf_finder">masm_region_pdf_finder</h3>
+Use parameters such as:
+
+<tt><pre>
+masm_region_pdf_builder { 
+  shape: box { ni: 11 nj: 7 } 
+  norm: linear 
+  pdf_builder: vpdfl_pc_gaussian_builder { mode_choice: proportionate var_prop: 0.8 }
+  search_ni: 11 search_nj: 3
+}
+</pre></tt>
+Alternatives:
+<ul>
+<li>shape can be <tt>ellipse { ri: 5 rj 3 }</tt> for ellipse with given radii along i and j
+<li>norm can be <tt>none</tt> for no normalisation.
+<li>pdf_builder can be <tt>pdf_builder: vpdfl_axis_gaussian_builder { }</tt> to model variance in each pixel separately.
+</ul>
+During search, the model will be scanned over a region [-search_ni,+search_ni]x[-search_nj,+search_nj] about the current position.<br>
+At each point the PDF of the region around that point will be evaluated, and the one with the highest probability chosen - ie the one most similar to the training distribution.
+
+<h3><a name="masm_grad_corr_finder">masm_grad_corr_finder</h3>
+Search using cross-correlation of gradient information.
+Use parameters such as:
+
+<tt><pre>
+masm_grad_corr_finder { ni: 7 nj: 9 is_1d: false
+    ref_x: 3 ref_y: 4
+    search_ni: 5 search_nj: 5
+ }
+</pre></tt>
+
+<h3><a name="masm_lin_reg_finder">masm_lin_reg_finder</h3>
+Search for point using linear regression on patch around current point.
+
+Use parameters such as:
+
+<tt><pre>
+masm_lin_reg_finder { shape: box { ni: 9 nj: 9 }
+   norm: linear 
+   n_random: 7
+   max_di: 3.5 max_dj: 2.5
+   search_ni: 5 search_nj: 5
+ }
+</pre></tt>
+
+During the building n_random samples are taken from each image at displacements in the region [-max_di,+max_dy][-max_dj,+max_dj].  A linear regressor is then trained to predict the displacement from the image patch.
+
+
+<h2><a name="masm_seq_building">Building Sequences of ASMs</h2>
+It is often useful to use a sequence of ASMs to get faster and more robust results.<br>
+For instance, the first ASM may work at a low resolution with only a few shape parameters - this can get to the approximate solution quickly. Subsequent ASMs will then work at increasing resolution with more shape modes.  This is a generalisation of the original "Multi-Resolution ASM" idea.<br>
+
+To build a sequence of ASMs, first build each individual ASM separately.<br>
+For instance, to create a basic multi-resolution ASM, you could use the above 
+parameter file with
+the <tt>frame_width</tt>=40 for face1.masm, 70 for face2.masm and 100 for face3.masm.
+
+Then use the following tool:
+<tt><pre>
+  masm_make_asm_series -p make_sequence.params
+</pre></tt>
+where <tt>make_sequence.params</tt> is a text file such as:
+<tt><pre>
+// Directory for the models
+model_dir: ./
+
+// List of built models
+model_files: {
+  face1.masm
+  face2.masm
+  face3.masm
+}
+</pre></tt>
+
+<h3><a name="masm_draw_mean_model">Displaying the mean model</h3>
+Use the following to create an EPS file showing the mean points, curves and a representation of the
+local models at each point for an ASM:
+
+<tt><pre>
+  masm_draw_mean_model -p draw_mean_model.params
+</pre></tt>
+Example parameter file:
+<tt><pre>
+//: File to load model from
+asm_path: model.masm
+
+curves_path: face_front.crvs
+
+//: Radius of points to display (if less than zero, then don't draw points)
+point_radius: 2
+
+line_colour: black
+point_colour: red
+local_model_colour: black
+
+// Approximate width of region to display shape
+width: 100
+
+eps_path: asm_mean.eps
+</pre></tt>
+
+<h3><a name="masm_seq_search_image">Searching images with an ASM</h3>
+The <tt>masm_series_search</tt> tool reads an a sequence of ASMs, then applies it to each image in a set.<br>
+On each image, the search is initialised from the default model pose (estimated from the original training set), using the mean shape (the shape parameter vector is set to zero).<br>
+The resulting points are saved to separate files, and there is the option to save an EPS file containing the image together with the resulting points (and curves) superimposed.<br>
+Useage:
+<tt><pre>
+  masm_series_search -p masm_series_search.params
+</pre></tt>
+
+Example parameter file:
+<tt><pre>
+//: File containing ASM sequence
+asm_path: face.masm
+
+//: Curves to be used if drawing result on an image
+curves_path: face_front.crvs
+
+// Width of output image (input will be scaled to this)
+//  If zero, don't generate output images
+out_image_width: 128
+
+// Directory to save output frames (image+results) to
+output_dir: ./asm_results/
+
+// Directory to save the final points to
+output_points_dir: ./asm_points/
+
+image_dir: /home/images/
+points_dir: /home/points/
+images: {
+  image1.jpg
+  image2.jpg
+}
+</pre></tt>
+
+<h3><a name="masm_test_search">Testing the performance of an ASM</h3>
+The <tt>masm_test_search</tt> run an ASM sequence on multiple images and evaluate its performance.
+It requires the ground truth points for each image (eg from manual markup), and some points (at least two) to define the initial shape.  Two points are sufficient to define the pose (position, rotation, scale).<br>
+On each image the model is initialised from a set of supplied initialisation points.  The sequential ASM search is run, then the result is compared to the ground truth points.  Performance for a single example is evaluated as the mean of the distances from each point to the true point position across the set, optionally relative to a reference length defined as the distance between two reference points on the true shape. Various statistics are calculated.
+
+Useage:
+<tt><pre>
+  masm_test_search -p test_search.params
+</pre></tt>
+
+Example parameter file:
+<tt><pre>
+//: File containing ASM sequence
+asm_path: face.masm
+
+curves_path: face_front.crvs
+
+// Index of ref point 0, 1 defining reference length.
+ref_pt0_index: 0   ref_pt1_index: 1
+
+// Directory to save the final points to, or "-" if to be ignored.
+output_points_dir: -
+
+//: Defines which points are initialised from initial_points.
+//  If initial_pt_index[i]>=0, then initialise using points[initial_pt_index[i]]=initial_points[i]
+//  If empty, then use all points
+initial_pt_index: { 31 36 }
+
+
+// Directory containing images
+image_dir: /home/images/
+
+// Directory containing `true' points
+points_dir: /home/points/
+
+// Directory containing points used to initialise the model
+initial_points_dir: /home/init_points/
+
+images: {
+  image1.pts : image1.jpg
+  image2.pts : image2.jpg
+}
+</pre></tt>
+
+</body>
+</html>
+
