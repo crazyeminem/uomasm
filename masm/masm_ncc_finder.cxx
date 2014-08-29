@@ -205,7 +205,7 @@ void masm_ncc_finder::search(const vimt_image_2d& image, const mfpf_pose& base_p
   vcl_ptrdiff_t s_jstep = sample.jstep();
   vcl_ptrdiff_t k_jstep = ncc_model_->kernel().jstep();
 
-  float best_r=-9e99;
+  float best_r=-9e9f;
   int best_i=-1,best_j=-1;
   for (int j=0;j<nj;++j,s+=s_jstep)
   {
@@ -244,7 +244,7 @@ void masm_ncc_finder::search2(const vimt_image_2d& image, const mfpf_pose& base_
   vcl_ptrdiff_t s_jstep = sample.jstep();
   vcl_ptrdiff_t k_jstep = ncc_model_->kernel().jstep();
 
-  float best_r=9e99;
+  float best_r=9e9f;
   int best_i=-1,best_j=-1;
   
   vil_image_view<float> fit_im(ni,nj);
@@ -252,7 +252,7 @@ void masm_ncc_finder::search2(const vimt_image_2d& image, const mfpf_pose& base_
   {
     for (int i=0;i<ni;++i)
     {
-      float r = 1.0-norm_corr(s+i,k,s_jstep,k_jstep,kni,knj);
+      float r = 1.0f-norm_corr(s+i,k,s_jstep,k_jstep,kni,knj);
       fit_im(i,j)=r;
       if (r<best_r) { best_r=r; best_i=i; best_j=j; }
     }

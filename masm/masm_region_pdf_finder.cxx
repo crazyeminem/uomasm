@@ -184,7 +184,7 @@ void masm_region_pdf_finder::search(const vimt_image_2d& image, const mfpf_pose&
   vnl_vector<double> v(region_pdf_model_->n_pixels()*np);
 
 
-  float best_r=9e99;
+  float best_r=9e9f;
   int best_i=-1,best_j=-1;
   for (int j=0;j<nj;++j,s+=s_jstep)
   {
@@ -228,7 +228,7 @@ void masm_region_pdf_finder::search2(const vimt_image_2d& image, const mfpf_pose
 
   vil_image_view<float> fit_im(ni,nj);
 
-  float best_r=9e99;
+  float best_r=9e9f;
   int best_i=-1,best_j=-1;
   for (int j=0;j<nj;++j,s+=s_jstep)
   {
