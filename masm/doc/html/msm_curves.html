@@ -1,0 +1,36 @@
+<html>
+<head>
+<title>Curves file</title>
+</head>
+<body>
+<h1>msm_curves: Curves file</h1>
+The <tt>msm_curves</tt> class encodes one or more "curves" as a set of point indices.<br>
+Each curve is assumed to join the given points in the order supplied.<br>
+If the curve is not open, then it is assumed to be closed and the last point is
+connected to the first point.<br>
+The <tt>crvs</tt> file is a text file defining the curves in a fairly easy to read/edit way.<br>
+For example, <tt>face_68pts.crvs</tt> defines the curves on a 68 point face markup:<br>
+<tt><pre>
+curves: {
+  curve:  { name: Chin open: true indices: { 0:14 } } 
+  curve:  { name: LEyebrow open: false indices: { 15:20 } } 
+  curve:  { name: REyebrow open: false indices: { 21:26 } } 
+  curve:  { name: LEye open: false indices: { 27:30 } } 
+  curve:  { name: REye open: false indices: { 32:35 } } 
+  curve:  { name: Nose open: true indices: { 37:45 } } 
+  curve:  { name: Nostrils open: true indices: { 46 47 } } 
+  curve:  { name: OuterLips open: false indices: { 48:59 } } 
+  curve:  { name: TopLip open: true indices: { 48 60 61 62 54 } } 
+  curve:  { name: BottomLip open: true indices: { 54 63 64 65 48 } } 
+}
+</pre></tt>
+
+The elements of each curve are:
+<ul>
+<li>name: The following text (which must not include any whitespace) defines a name for the curve
+<li>open: true/false  - Defines whether the curve is open or closed
+<li>indices: A list of integers defining the points to be connected. Ranges can be specified, such as 0:14 or 45:40 (for counting backwards) to indicate all integers in the given range.
+</ul>
+
+</body>
+</html>
