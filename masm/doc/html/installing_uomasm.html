@@ -42,12 +42,11 @@ So in the above directory tree:
 cd fred/code/vxl/vxl
 git clone git://git.code.sf.net/p/uomasm/code uomasm
 </pre></tt>
-Then edit the CMakeList.txt file within vxl, adding the line
-
+If there is not already a file called CMakeListsLocal.txt within vxl, create one.
+Edit it, adding the line
 <tt><pre>
 SUBDIR(uomasm)
 </pre></tt>
-near the end.<br>
 Then just go into the obj directory and run make.<br>
 This should automatically set up and compile all of uomasm (into the directory obj/uomasm).
 
