@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>Points file</title>
+</head>
+<body>
+<h1>msm_points: Points file</h1>
+<p>All the tools in UoMASM assume that points are provided in text files in one of the two formats shown below.<br>
+The <tt>msm_points</tt> class encodes a set of points which can be read from/written to a text file in the format shown below.</p>
+
+This is the default format which is written by the tools and library functions:
+<tt><pre>
+version: 1
+n_points: 4
+{
+316.069 201.255
+410.593 206.549
+333.881 320.539
+411.389 320.995
+}
+</pre></tt>
+
+Note that points in a simpler two column format can also be read in:
+<tt><pre>
+4
+316.069 201.255
+410.593 206.549
+333.881 320.539
+411.389 320.995
+</pre></tt>
+The first line indicates how many points follow.
+
+</body>
+</html>
