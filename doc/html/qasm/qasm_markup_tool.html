@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>qasm_markup_tool</title>
+</head>
+<body>
+<h1>qasm_markup_tool</h1>
+<h2>A tool for searching with an ASM and tweaking the result</h2>
+
+<TABLE>
+<TR>
+<TD><IMG SRC="images/qasm_markup_tool-1.png" ></TD>
+<TD><IMG SRC="images/qasm_markup_tool-2.png" ></TD>
+</TR>
+</TABLE>
+A tool which allows a user to
+<ul>
+<li>Load in an image, a series of ASMs and a set of associated curves
+<li>Search the image with the ASM series
+<li>Edit the points
+<li>Save the points to a .pts files
+</ul>
+When multiple images and points are to be viewed or corrected, a file listing all the images+points files can be loaded.<br>
+
+Use the mouse wheel to zoom in and out.<br>
+An initial shape and associated curves can be created with the <a href="../qmsm/qmsm_markup_tool.html">qmsm_markup_tool</a>.
+The ASM is assumed to be built using masm tools.
+
+<ul>
+<li><a href="#command_line">Command line options</a>
+<li><a href="#point_state">Point State</a>
+<li><a href="#menu_options">Menu Options</a>
+<li><a href="#interaction_modes">Interaction Modes</a>
+<li><a href="#point_manipulation">Point Manipulation</a>
+</ul>
+
+<h2><a name="command_line">Command line options</h3>
+Run the tool using either:
+<tt><pre>
+qasm_markup_tool -i image.png -p points.pts [-c curves.crvs] [-m asm_series.asms]
+</pre></tt>
+where <tt>curves.crvs</tt> is a <a href="../msm_curves.html">curves</a> file and <tt>asm_series.asms</tt> contains a <tt>masm_model_series</tt> object (for instance, built by the <tt>masm_make_asm_series</tt> tool.<br>
+
+or:
+<tt><pre>
+qasm_markup_tool -l image_list.txt [-c curves.crvs] [-m asm_series.asms]
+</pre></tt>
+where <tt>image_list.txt</tt> is a text parameter file in the following format:
+
+<tt><pre>
+// Define directories containing image and points files
+image_dir: images/
+points_dir: points/
+images:
+{
+  example1.pts : example1.png
+  example2.pts : example2.png
+  example3.pts : example3.png
+}
+</pre></tt>
+
+when this option is used (or such a list is loaded using the "File->Load Image List" option), the tool
+records the list of images and points, and displays the first one.<br>
+You can then step through the images using the left and right arrow keys, or the items on the View menu (for first/last).<br>
+If the "Always ask to save Points" flag (in the Props menu) is set, then it will always ask if you wish to save the points when you move to the next image.  If it is false, it will not ask (and will not save them).
+
+<h2><a name="point_state">Point State</h3>
+The colours of the points indicate their state.<br>
+Unless you have changed them (using the Graph Props), they are as follows:<br>
+<ul>
+<li>Cyan: Normal, unselected points
+<li>Yellow: Selected points
+<li>Red: Fixed points
+</ul>
+
+<h2><a name="menu_options">Menu Options</h2>
+<h3>File Menu</h3>
+<ul>
+<li>Open file list (see below)
+<li>Open Image
+<li>Load Points
+<li>Load Curves
+<li>Load Shape Model
+<li>Save Points
+</ul>
+<h3>View Menu</h3>
+<ul>
+<li>First Image - Move to first image in list
+<li>Next Image - Move to next image in list  (or use right arrow key)
+<li>Previous Image - Move to previous image in list (or use left arrow key)
+<li>Last Image - Move to last image in list
+<li>Graph Props - Display panel allowing size/colours of points/curves to be tweaked
+<li>Reset shape - set shape parameters to zero
+<li>Centre shape - move shape so that its centre of gravity is at the centre of the image
+<li>Clear selected points - Unfix selected points
+<li>Fix selected points
+<li>Always ask to save Points - When selected, always ask about saving points when moving to next image.
+</ul>
+
+
+<h3>Help Menu</h3>
+<ul>
+<li>Help: Display summary of functionality
+</ul>
+
+<h2><a name="interaction_modes">Interaction Modes</h2>
+<TABLE>
+<TR>
+<TD><IMG SRC="../qmsm/images/drag_button.png" ></TD>
+<TD>Drag Mode</TD>
+<TD>Click and drag to move viewport around</TD>
+</TR>
+<TR>
+<TD><IMG SRC="../qmsm/images/select_mode_button.png" ></TD>
+<TD>Select Mode</TD>
+<TD>Press and drag to move a point. Rubber-band box to select groups.</TD>
+</TR>
+<TR>
+<TD><IMG SRC="../qmsm/images/drag_shape_button.png" ></TD>
+<TD>Drag-Shape Mode</TD>
+<TD>Click and drag a point to move it.  All un-fixed points are dragged around to satisfy shape model constraints.</TD>
+</TR>
+<TR>
+<TD><IMG SRC="../qmsm/images/equal_space_button.png" ></TD>
+<TD>Equal Space Mode</TD>
+<TD>Click on a point to equally space points on the curve through the point, limited by either the ends of the curve or fixed points.</TD>
+</TR>
+</TABLE>
+The "Clear"  button sets all points to not fixed.<br>
+The "Search" button performs the ASM search, fixing any points defined as fixed.<br>
+The "Reset"  button resets the shape model parameters to zero (the mean shape).
+
+<h3>Undo/Redo</h3>
+The undo/redo buttons allow you to do just that.
+
+<h2><a name="point_manipulation">Point Manipulation</h2>
+<h3>Translating all the points</h3>
+To drag all the points at once, either
+<ul>
+<li>Choose Select mode.  Drag a box around all the points to select them. Click and drag on any point to move all selected points.
+<li>Choose Drag-Shape model. Press "Clear" to unfix any fixed (red) points.  Click and drag any point to move all of them.
+</ul>
+<h3>Rotating/Scaling all the points</h3>
+Two steps:
+<ul>
+<li>Choose Drag-Shape model. Press "Clear" to unfix any fixed (red) points.  Click and drag any point to move all of them, until the selected point is in the correct position.
+<li>Click and drag a second point (preferably some distance from the first) - all the points will scale/rotate 
+around the first fixed point as you do this.
+</ul>
+
+<h3>Using a Shape Model to guide the points</h3>
+If you have loaded a shape model, when you are in the Drag-Shape mode it can be used to help move points around.<br>
+When you click and drag, any points which are not fixed will be moved around so that they best satisfy the shape
+constraints.  To avoid this being over-constrained (as may be the case when there are few shape parameters
+available), a residual term is calculated for each point to ensure smooth deformation.  This is calculated
+by performing a weighted least squares fit of the model to the fixed points.  Any residual term at each point is recorded, and a Thin-Plate Spline used to propogate the residual to all other points.  This is simple but pleasingly effective.
+</body>
+</html>

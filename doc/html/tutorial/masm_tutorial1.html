@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>UoMASM: Tutorial</title>
+</head>
+<body>
+<h2>UoMASM Tutorial 1: Building from existing points</h2>
+An example of building and using Active Shape Models, assuming we have a set of images
+and associated points.<br>
+See for example, the data in the <tt>uomasm/examples</tt> directory.<br>
+
+If you do not have points for your images, see <a href="masm_tutorial2.html">Tutoral 2</a>.
+
+
+<h3>Files and Directory structure</h3>
+We will assume the following directory structure:
+<tt><pre>
+- images   : Contains images
+- points   : Contains associated points files
+- models   : Contains parameter files and models
+</pre></tt>
+
+For convenience, we assume that for every image, <tt>images/imageX.jpg</tt>, there is an associated <a href="../msm_points.html">points</a> file, <tt>points/imageX.pts</tt>.<br>
+
+Many of the parameter files contain image lists defining the images and associated points to use.<br>
+The basic image list format is as follows:
+<tt><pre>
+image_dir: ../images/
+points_dir: ../points/
+images: {
+  image00.pts : image00.jpg
+  image01.pts : image01.jpg
+  image02.pts : image02.jpg
+  image03.pts : image03.jpg
+  image04.pts : image04.jpg
+}
+</pre></tt>
+
+To describe the lines connecting the points, we use a <a href="../msm_curves.html">msm_curves</a> file.
+
+<h2>Building a shape model</h3>
+To build a shape model from the data, create a parameter file in the models director, for example: <a href="params/build_shape_model.params">build_shape_model.params</a>.<br>
+From within the models directory, run:
+<tt><pre>
+msm_build_shape_model -p build_shape_model.params
+</pre></tt>
+this will create a binary file, <tt>shape_model.bfs</tt> containing a <tt>msm_shape_model</tt>.
+
+<h2>Displaying the modes of the model (command line)</h2>
+You can use the tool <tt>msm_draw_shape_modes</tt> to create one or more EPS files showing the modes.<br>
+First create a parameter file, for example <a href="params/draw_shape_modes.params">draw_shape_modes.params</a>.<br>
+Then call:
+<tt><pre>
+msm_draw_shape_modes -p draw_shape_modes.params
+</pre></tt>
+This will generate one file per mode, showing the mean shape and the effect of varying each parameter by +/-3SDs.<br>
+If you change the parameter <tt>make_movie</tt> to true, it will generate a sequence of movie frames, which can be collected and displayed with your favourite animation tool.
+
+<h2>Displaying the modes of the model (GUI)</h2>
+Use the GUI tool, <a href="../qmsm/qmsm_shape_mode_viewer.html">qmsm_shape_mode_viewer</a>:
+
+<tt><pre>
+qmsm_shape_mode_viewer -s shape_model.bfs -c face_68pts.crvs
+</pre></tt>
+
+<h2>Building a single ASM</h2>
+To build a single ASM, create a parameter file in the models directory, for example: <a href="params/build_asm1.params">build_asm1.params</a>.<br>
+From within the models directory, run:
+<tt><pre>
+masm_build_asm -p build_asm1.params
+</pre></tt>
+
+This builds a binary file, <tt>face1.masm</tt>, containing an ASM object.
+
+<h2>Building a series of ASMs</h2>
+First build a second ASM.<br>
+Create a second parameter file, for example <a href="params/build_asm2.params">build_asm2.params</a>.<br>
+Run:
+<tt><pre>
+masm_build_asm -p build_asm2.params
+</pre></tt>
+
+Set up a new parameter file defining which single ASMs to combine.<br>
+For instance,  <tt>make_asm_series.params</tt>:
+<tt><pre>
+// Directory for the models
+model_dir: ./
+
+// List of built models
+model_files: {
+  face1.masm
+  face2.masm
+}
+</pre></tt>
+
+Run:
+<tt><pre>
+masm_make_asm_series -p make_asm_series.params -o face_series.masms
+</pre></tt>
+
+<h3>Searching new images using a GUI</h3>
+You can use the <a href="../qasm/qasm_markup_tool.html">qasm_markup_tool</a> to search new images with the model you have just built.
+
+<h3>Testing performance of ASMs</h3>
+Use the <tt>masm_test_search</tt> tool.<br>
+Set up a parameter file, for instance <a href="params/test_search.params">test_search.params</a>.<br>
+The tool allows you to initialise the shape model points with examples from one directory (initial_points_dir), run the 
+series of ASMs, then compare the result with points defined in a second directory (points_dir).<br>
+If  initial_points_dir=points_dir then this just gives an idea of whether the model converges given the correct starting point.
+
+Run:
+<tt><pre>
+masm_test_search -p test_search.params
+</pre></tt>
+
+
+<hr>
+<a href="../index.html">UoMASM Index</a>
+</body>
+</html>

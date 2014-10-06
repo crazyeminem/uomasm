@@ -1,0 +1,154 @@
+<html>
+<head>
+<title>qmsm_shape_editor: Tool for manipulating points on an image</title>
+</head>
+<body>
+<h1>qmsm_shape_editor: Tool for manipulating points on an image</h1>
+
+<TABLE>
+<TR>
+<TD><IMG SRC="images/qmsm_shape_editor.png" ></TD>
+<TD><IMG SRC="images/graph_props.png" ></TD>
+</TR>
+</TABLE>
+A tool which allows a user to
+<ul>
+<li>Load in an image, some points and curves
+<li>Optionally load in an associated shape model
+<li>Move the points around, either singly, in groups or all together, guided by the shape model.
+<li>Save the points to a .pts files
+</ul>
+When multiple images and points are to be viewed or corrected, a file listing all the images+points files can be loaded.<br>
+
+Use the mouse wheel to zoom in and out.<br>
+An initial shape and associated curves can be created with the <a href="qmsm_markup_tool.html">qmsm_markup_tool</a>.
+
+
+<ul>
+<li><a href="#command_line">Command line options</a>
+<li><a href="#point_state">Point State</a>
+<li><a href="#menu_options">Menu Options</a>
+<li><a href="#interaction_modes">Interaction Modes</a>
+<li><a href="#point_manipulation">Point Manipulation</a>
+</ul>
+
+<h2><a name="command_line">Command line options</h3>
+Run the tool using either:
+<tt><pre>
+qmsm_shape_editor -i image.png -p points.pts [-c curves.crvs] [-s shape_model.msm]
+</pre></tt>
+where <tt>curves.crvs</tt> is a <a href="msm_curves.html">curves</a> file and <tt>shape_model.msm</tt> contains an <tt>msm_shape_model</tt> object (for instance, built by the <tt>msm_build_shape_model</tt> tool.<br>
+
+or:
+<tt><pre>
+qmsm_shape_editor -l image_list.txt [-c curves.crvs] [-s shape_model.msm]
+</pre></tt>
+where <tt>image_list.txt</tt> is a text parameter file in the following format:
+
+<tt><pre>
+// Define directories containing image and points files
+image_dir: images/
+points_dir: points/
+images:
+{
+  example1.pts : example1.png
+  example2.pts : example2.png
+  example3.pts : example3.png
+}
+</pre></tt>
+
+when this option is used (or such a list is loaded using the "File->Load Image List" option), the tool
+records the list of images and points, and displays the first one.<br>
+You can then step through the images using the left and right arrow keys, or the items on the View menu (for first/last).<br>
+If you edit any points, when you attempt to move to another image it will ask you if you wish to save the changes (overwritting the existing file).  If you set the "Always Save Points" flag (in the Props menu), then it will always save the points, without asking, when you move to the next image.
+
+<h2><a name="point_state">Point State</h3>
+The colours of the points indicate their state.<br>
+Unless you have changed them (using the Graph Props), they are as follows:<br>
+<ul>
+<li>Cyan: Normal, unselected points
+<li>Yellow: Selected points
+<li>Red: Fixed points
+</ul>
+
+<h2><a name="menu_options">Menu Options</h2>
+<h3>File Menu</h3>
+<ul>
+<li>Open file list (see below)
+<li>Open Image
+<li>Load Points
+<li>Load Curves
+<li>Load Shape Model
+<li>Save Points
+</ul>
+<h3>View Menu</h3>
+<ul>
+<li>First Image - Move to first image in list
+<li>Next Image - Move to next image in list  (or use right arrow key)
+<li>Previous Image - Move to previous image in list (or use left arrow key)
+<li>Last Image - Move to last image in list
+<li>Graph Props - Display panel allowing size/colours of points/curves to be tweaked
+</ul>
+
+<h3>Props Menu</h3>
+<ul>
+<li>Always Save Points - When selected, always save points when moving to next image, without asking user. Use carefully, as this will overwrite existing points.
+</ul>
+
+
+<h3>Help Menu</h3>
+<ul>
+<li>Help: Display summary of functionality
+</ul>
+
+<h2><a name="interaction_modes">Interaction Modes</h2>
+<TABLE>
+<TR>
+<TD><IMG SRC="images/drag_button.png" ></TD>
+<TD>Drag Mode</TD>
+<TD>Click and drag to move viewport around</TD>
+</TR>
+<TR>
+<TD><IMG SRC="images/select_mode_button.png" ></TD>
+<TD>Select Mode</TD>
+<TD>Press and drag to move a point. Rubber-band box to select groups.</TD>
+</TR>
+<TR>
+<TD><IMG SRC="images/drag_shape_button.png" ></TD>
+<TD>Drag-Shape Mode</TD>
+<TD>Click and drag a point to move it.  All un-fixed points are dragged around to satisfy shape model constraints.</TD>
+</TR>
+<TR>
+<TD><IMG SRC="images/equal_space_button.png" ></TD>
+<TD>Equal Space Mode</TD>
+<TD>Click on a point to equally space points on the curve through the point, limited by either the ends of the curve or fixed points.</TD>
+</TR>
+</TABLE>
+The "Clear"  button sets all points to not fixed.<br>
+
+<h3>Undo/Redo</h3>
+The undo/redo buttons allow you to do just that.
+
+<h2><a name="point_manipulation">Point Manipulation</h2>
+<h3>Translating all the points</h3>
+To drag all the points at once, either
+<ul>
+<li>Choose Select mode.  Drag a box around all the points to select them. Click and drag on any point to move all selected points.
+<li>Choose Drag-Shape model. Press "Clear" to unfix any fixed (red) points.  Click and drag any point to move all of them.
+</ul>
+<h3>Rotating/Scaling all the points</h3>
+Two steps:
+<ul>
+<li>Choose Drag-Shape model. Press "Clear" to unfix any fixed (red) points.  Click and drag any point to move all of them, until the selected point is in the correct position.
+<li>Click and drag a second point (preferably some distance from the first) - all the points will scale/rotate 
+around the first fixed point as you do this.
+</ul>
+
+<h3>Using a Shape Model to guide the points</h3>
+If you have loaded a shape model, when you are in the Drag-Shape mode it can be used to help move points around.<br>
+When you click and drag, any points which are not fixed will be moved around so that they best satisfy the shape
+constraints.  To avoid this being over-constrained (as may be the case when there are few shape parameters
+available), a residual term is calculated for each point to ensure smooth deformation.  This is calculated
+by performing a weighted least squares fit of the model to the fixed points.  Any residual term at each point is recorded, and a Thin-Plate Spline used to propogate the residual to all other points.  This is simple but pleasingly effective.
+</body>
+</html>

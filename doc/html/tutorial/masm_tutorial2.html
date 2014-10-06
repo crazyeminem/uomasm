@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>UoMASM: Tutorial 2</title>
+</head>
+<body>
+<h2>UoMASM Tutorial 2: Building an ASM from scratch</h2>
+An example of building and using Active Shape Models, assuming we start with a set of unlabelled images.<br>
+If you have annotated images, see <a href="masm_tutorial1.html">Tutoral 1</a>.
+
+<h3>Files and Directory structure</h3>
+We will assume the following directory structure:
+<tt><pre>
+- images   : Contains images
+- points   : Directory for associated points files
+- models   : Directory parameter files and models
+</pre></tt>
+
+During the annotation process, for every image, <tt>images/imageX.jpg</tt>, we will create an associated <a href="../msm_points.html">points</a> file, <tt>points/imageX.pts</tt>.<br>
+
+<h2>Annotating the first image</h2>
+First define the points of interest and any connecting curves using the <a href="../qmsm/qmsm_markup_tool.html">qmsm_markup_tool</a>.
+This allows you to load in an image, add points and curves, then save the points and associated <a href="../msm_curves.html">msm_curves</a> file.<br>
+Use your skill and judgement to place a suitable number of points at key landmarks and around the boundaries that you wish to model.<br>
+Save the points to the <tt>points</tt> directory, with a name derived from the image name (e.g. image00.pts) and the curves to the <tt>models</tt> directory (e.g. to models/my_model.crvs).<br>
+
+If you wish, at this point you can follow the steps in <a href="masm_tutorial1.html">Tutoral 1</a> to build a basic ASM from this single example.  Note that this model will have no shape modes, and
+will only allow pose transformations when being fit to a new image.  However, this can be good 
+enough to start further annotation.  If so, skip the next section and start building your model.<br>
+
+Since it is a good idea to build the first model from a few examples, in order to learn a bit of shape variation, you can use the first example as a template for annotating some more images, before building a model.
+
+<h2>Purely manual annotation of further images</h2>
+You can use the <a href="../qmsm/qmsm_shape_editor.html">qmsm_shape_editor</a> tool to modify the
+points to match subsequent images.<br>
+The simplest approach is to run the tool from the models directory using something like:
+<tt><pre>
+qmsm_shape_editor -i ../images/image01.jpg -c my_model.crvs -p ../points/image00.pts
+</pre></tt>
+This loads the points from the first image and displays them over the second image. You can then
+move them around as necessary.  When happy, save them to ../points/image01.pts.<br>
+Load in the next image and repeat.<br>
+
+<h3>Using image lists</h3>
+To simplify the process of stepping through the images, and to reduce the risk of mis-naming the points, you can create an image list file, in the following format:
+<tt><pre>
+image_dir: ../images/
+points_dir: ../points/
+images: {
+  image00.pts : image00.jpg
+  image01.pts : image01.jpg
+  image02.pts : image02.jpg
+  image03.pts : image03.jpg
+  image04.pts : image04.jpg
+}
+</pre></tt>
+Copy the first set of points (image00.pts) to files image01.pts, image02.pts etc.<br>
+Then run 
+<tt><pre>
+qmsm_shape_editor -l image_list.txt -c my_model.crvs
+</pre></tt>
+This will display the first image and associated points (which should be correct).<br>
+You can now use the left and right arrow keys to step through the images and associated points.<br>
+Modify those that need moving as necessary.  When you step to a new image, the points will automatically be saved to the correct file. This can save a lot of fiddling about.
+
+<h2>Using an ASM to help annotation</h2>
+Once you have sufficient images annotated (and a single image can be enough for a simple model),
+you can follow the instructions in <a href="masm_tutorial1.html">Tutoral 1</a> to build an ASM.<br>
+
+You can then use the <a href="../qasm/qasm_markup_tool.html">qasm_markup_tool</a> to annotate
+further images.<br>
+Create an image list with the names of the so-far un-labelled images to simplify the process of stepping through them. In this case, you don't need to provide any points files - the program will use the model to create them as necessary.<br>
+Periodically add the annotated images to your training set and rebuild the model.<br>
+<hr>
+<a href="../index.html">UoMASM Index</a>
+</body>
+</html>

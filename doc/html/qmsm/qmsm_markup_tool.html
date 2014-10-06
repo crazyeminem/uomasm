@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>qmsm_markup_tool: Tool for creating points and curves on an image</title>
+</head>
+<body>
+<h1>qmsm_markup_tool: Tool for creating points and curves on an image</h1>
+
+<TABLE>
+<TR>
+<TD><IMG SRC="images/qmsm_markup.png" ></TD>
+<TD><IMG SRC="images/graph_props.png" ></TD>
+<TD><IMG SRC="images/qmsm_markup_tool_zoom.png" ></TD>
+</TR>
+</TABLE>
+A tool which allows a user to
+<ul>
+<li>Load in an image
+<li>Annotate it with points and connecting curves
+<li>Save the points and curves to .pts and .crvs files
+</ul>
+This is useful for creating the first template for a shape model.<br>
+Use the mouse wheel to zoom in and out.<br>
+Once the points have been saved, they can be editted using the <a href="qmsm_shape_editor.html">qmsm_shape_editor</a>
+
+<h2>Menu Options</h2>
+<h3>File Menu</h3>
+<ul>
+<li>Open Image
+<li>Load Points
+<li>Load Curves
+<li>Save Points
+<li>Save Curves
+<li>Graph Props - Display panel allowing size/colours of points/curves to be tweaked
+<li>Unzoom  - Show whole image
+</ul>
+
+<h3>Help Menu</h3>
+<ul>
+<li>Help: Display summary of functionality
+</ul>
+
+<h2>Interaction Modes</h2>
+<TABLE>
+<TR>
+<TD><IMG SRC="images/drag_button.png" ></TD>
+<TD>Drag Mode</TD>
+<TD>Click and drag to move viewport around</TD>
+</TR>
+<TR>
+<TD><IMG SRC="images/add_point_button.png" ></TD>
+<TD>Add Point Mode</TD>
+<TD>Click to add new point</TD>
+</TR>
+<TR>
+<TD><IMG SRC="images/add_curve_button.png" ></TD>
+<TD>Add Curve Mode</TD>
+<TD>Click new position to extend point from currently highlighted point</TD>
+</TR>
+</TABLE>
+When in "Add Curve" mode, you can link to an existing point by clicking on it.<br>
+To start a new curve, click on the currently selected point (to deselect it), then
+click in a new position to create a new point and select it.  A second click elsewhere
+with create a new point and connect to it.
+
+<h3>Undo/Redo</h3>
+The undo/redo buttons allow you to do just that.
+</body>
+</html>

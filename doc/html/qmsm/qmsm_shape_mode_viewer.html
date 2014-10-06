@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>qmsm_shape_mode_viewer: A tool for animating the modes of a shape model</title>
+</head>
+<body>
+<h1>qmsm_shape_mode_viewer</h1>
+<h2>A tool for animating the modes of a shape model</h2>
+
+<TABLE>
+<TR>
+<TD><IMG SRC="images/qmsm_shape_mode_viewer.png" ></TD>
+<TD><IMG SRC="images/graph_props.png" ></TD>
+<TD><IMG SRC="images/mode_s2.gif" ></TD>
+</TR>
+</TABLE>
+A tool which allows a user to
+<ul>
+<li>Load in a shape model and an associated set of <a href="msm_curves.html">curves</a>
+<li>Animate one of the modes
+<li>Save frames for one or several modes (to allow a movie to be created)
+</ul>
+The shape model is assumed to have been built by <tt>msm_build_shape_model</tt> or equivalent tool.<br>
+
+Usage:
+<tt><pre>
+qmsm_shape_mode_viewer [-s shape_model.msm] [-c curves.crvs]
+</pre></tt>
+where <tt>curves.crvs</tt> is a <a href="msm_curves.html">curves</a> file and <tt>shape_model.msm</tt> contains an <tt>msm_shape_model</tt> object (for instance, built by the <tt>msm_build_shape_model</tt> tool.<br>
+
+<h2>Menu Options</h2>
+<h3>File Menu</h3>
+<ul>
+<li>Load Model - Load in a shape model (msm_shape_model)
+<li>Load Curves - Load curves from a <a href="msm_curves.html">.crvs</a> file.
+<li>Save Frames - Save frames as images for current mode (eg mode_XX.png if basename is "mode")
+<li>Save Frames (n modes) - Save frames as images for all modes up to this one (eg mode_s1_XX.png, mode_s2_XX.png etc)
+</ul>
+<h3>View Menu</h3>
+<ul>
+<li>Graph Props - Display panel allowing size/colours of points/curves to be tweaked
+</ul>
+
+<h3>Other variables</h3>
+<ul>
+<li>Mode:  Select mode to display
+<li>Max.D: Select parameter range as a percentage of the standard deviation for the mode.
+</ul>
+</body>
+</html>

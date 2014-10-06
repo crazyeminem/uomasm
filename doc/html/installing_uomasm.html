@@ -35,7 +35,11 @@ fred/code/vxl/vxl  - The source code
 fred/code/vxl/obj  - The compiled code
 </pre></tt>
 
-<h3>2a) Simple Approach: Install into the VXL source tree</h3>
+<h3>2) [Optional] Install UoMqVXL</h3>
+This is required if you wish to compile the ASM GUI tool, <a href="qasm/qasm_markup_tool.html">qasm_markup_tool</a>.<br>
+Follow the instructions here: <a href=""http://sourceforge.net/projects/uomqvxl/">UoMqVXL</a>
+
+<h3>3a) Simple Approach: Install into the VXL source tree</h3>
 The simplest thing is to install uomasm into the root of the vxl directory.<br>
 So in the above directory tree:
 <tt><pre>
@@ -48,9 +52,11 @@ Edit it, adding the line
 SUBDIR(uomasm)
 </pre></tt>
 Then just go into the obj directory and run make.<br>
-This should automatically set up and compile all of uomasm (into the directory obj/uomasm).
+This should automatically set up and compile all of uomasm (into the directory obj/uomasm).<br>
 
-<h3>2b) Alternative approach: Modules in a separate directory tree</h3>
+If you wish to compile the ASM GUI tool, you must set the flag: BUILD_UoMASM_QASM to ON (by default it is OFF).  This can be done either by editing the CMakeCache.txt file (in the obj directory), or through the CMake GUI. Having changed the flag, re-run make.
+
+<h3>3b) Alternative approach: Modules in a separate directory tree</h3>
 <h4>i) Create directories</h4>
 Create a new directory to contain your new modules, eg
 <tt><pre>
@@ -86,6 +92,14 @@ IF(VXL_FOUND)
   SUBDIRS(uomasm)
 ENDIF(VXL_FOUND)
 </pre></tt>
+
+Note, if you have already installed UoMqVXL, then just add uomasm to the CMakeLists.txt:
+<tt><pre>
+  ...
+  SUBDIRS(uomqvxl)
+  SUBDIRS(uomasm)
+</pre></tt>
+
 <h4>iv) Compile it</h4>
 This requires several steps.<br>
 First go into vxl_modules/obj and run <tt>cmake ../src</tt>.<br>
@@ -97,7 +111,10 @@ For instance:
 //The directory containing a CMake configuration file for VXL.
 VXL_DIR:PATH=/home/fred/code/vxl/obj
 </pre></tt>
-Then re-run make - and all should be created.
+Then re-run make - and all should be created.<br>
+
+If you wish to compile the ASM GUI tool, you must set the flag: BUILD_UoMASM_QASM to ON (by default it is OFF).  This can be done either by editing the CMakeCache.txt file (in the obj directory), or through the CMake GUI. Having changed the flag, re-run make.
+
 
 </body>
 </html>
