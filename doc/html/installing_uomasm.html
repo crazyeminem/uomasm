@@ -54,7 +54,15 @@ SUBDIR(uomasm)
 Then just go into the obj directory and run make.<br>
 This should automatically set up and compile all of uomasm (into the directory obj/uomasm).<br>
 
-If you wish to compile the ASM GUI tool, you must set the flag: BUILD_UoMASM_QASM to ON (by default it is OFF).  This can be done either by editing the CMakeCache.txt file (in the obj directory), or through the CMake GUI. Having changed the flag, re-run make.
+If you wish to compile the ASM GUI tool, you must set the flag: BUILD_UoMASM_QASM to ON (by default it is OFF).  This can be done either by editing the CMakeCache.txt file (in the obj directory), or through the CMake GUI. Having changed the flag, re-run make.<br>
+
+Note that you must have installed the
+<a href=""http://sourceforge.net/projects/uomqvxl/">UoMqVXL</a> package for this to work. Your CMakeLists.txt file should include the lines:
+<tt><pre>
+SUBDIR(uomqvxl)
+SUBDIR(uomasm)
+</pre></tt>
+
 
 <h3>3b) Alternative approach: Modules in a separate directory tree</h3>
 <h4>i) Create directories</h4>
