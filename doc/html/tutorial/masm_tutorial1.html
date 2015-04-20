@@ -8,8 +8,15 @@ An example of building and using Active Shape Models, assuming we have a set of 
 and associated points.<br>
 See for example, the data in the <tt>uomasm/examples</tt> directory.<br>
 
-If you do not have points for your images, see <a href="masm_tutorial2.html">Tutorial 2</a>.
+If you do not have points for your images, see <a href="masm_tutorial2.html">Tutorial 2</a>.<p>
 
+<b>Note:</b> This assumes that you have put the various msm and masm tools somewhere so that they
+can be run from any directory.  One of the ways of doing this (linux) is:
+<ol>
+<li>Create a "bin" directory in your home directory, if you don't already have one
+<li>Add symbolic links in it to each tool (eg using <tt>"ln -s ~/code/obj/uomasm/masm/tools/masm_build_asm ."</tt> in the bin directory)
+<li>Ensuring ~/bin is in your PATH, e.g. by adding `PATH="$HOME/bin:$PATH"` to your .profile
+</ol>
 
 <h3>Files and Directory structure</h3>
 We will assume the following directory structure:
