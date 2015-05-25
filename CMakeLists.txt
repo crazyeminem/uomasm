@@ -4,6 +4,8 @@
 
 PROJECT(UoMASM)
 
+doxygen_add_package(uomasm "University of Manchester's Active Shape Model Libraries")
+
 OPTION(BUILD_UoMASM_QASM "Should the qasm libraries in UoMASM be built?" NO)
 
 

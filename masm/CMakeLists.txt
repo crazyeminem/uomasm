@@ -3,14 +3,9 @@
 #   Tim Cootes
 #
 
-#doxygen_add_library(uomasm/masm
-#  DEPENDS contrib/mul/msm contrib/mul/mfpf
-#  PACKAGE contrib/mul
-#  DESCRIPTION "Manchester's ASM Library"
-#)
 doxygen_add_library(uomasm/masm
   DEPENDS contrib/mul/msm contrib/mul/mfpf
-  PACKAGE contrib/mul
+  PACKAGE uomasm
   DESCRIPTION "Manchester's ASM Library"
 )
 

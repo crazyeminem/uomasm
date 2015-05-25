@@ -4,6 +4,12 @@
 # Tim Cootes
 #
 
+doxygen_add_library(uomasm/qasm
+  DEPENDS uomasm/masm uomqvxl/qmsm
+  PACKAGE uomasm
+  DESCRIPTION "Library of Widgets for Displaying and Manipulating Active Shape Models"
+  )
+
 SET(qasm_sources
   qasm_searcher_widget.h            qasm_searcher_widget.cxx
 )
