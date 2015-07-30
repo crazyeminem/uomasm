@@ -44,8 +44,11 @@ protected:
   vimt_image_pyramid image_pyr_;
 
   //: Define image to use (Takes a deep copy)
-  virtual void set_image(const vimt_image_2d_of<vxl_byte>&);
+  virtual void set_image_b(const vimt_image_2d_of<vxl_byte>&);
   
+  //: Define image to use (Takes a deep copy)
+  virtual void set_image_f(const vimt_image_2d_of<float>&);
+
 public:
   qasm_searcher_widget(QWidget *parent=0);
 

@@ -252,8 +252,8 @@ void qasm_markup_tool::load_image(const QString& path)
 
   vcl_string name = vul_file::strip_directory((path.toStdString()));
   vcl_stringstream ss;
-  ss<<name<<" "<<searcher_widget_.image().image().ni()
-               <<"x"<<searcher_widget_.image().image().nj();
+  ss<<name<<" "<<searcher_widget_.image_base().image_base().ni()
+               <<"x"<<searcher_widget_.image_base().image_base().nj();
   status_->setText(QString(ss.str().c_str()));
 
   set_image_list_active(false);

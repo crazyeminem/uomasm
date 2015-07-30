@@ -73,9 +73,9 @@ void qasm_searcher_widget::set_model(const masm_model_series& model)
 }
 
 //: Define image to use (Takes a deep copy)
-void qasm_searcher_widget::set_image(const vimt_image_2d_of<vxl_byte>& image)
+void qasm_searcher_widget::set_image_b(const vimt_image_2d_of<vxl_byte>& image)
 {
-  qmsm_shape_editor_widget::set_image(image);
+  qmsm_shape_editor_widget::set_image_b(image);
 
   vimt_gaussian_pyramid_builder_2d<vxl_byte> pyr_builder;
 
@@ -91,6 +91,27 @@ void qasm_searcher_widget::set_image(const vimt_image_2d_of<vxl_byte>& image)
     pyr_builder.build(image_pyr_,grey_image);
   }
 }
+
+//: Define image to use (Takes a deep copy)
+void qasm_searcher_widget::set_image_f(const vimt_image_2d_of<float>& image)
+{
+  qmsm_shape_editor_widget::set_image_f(image);
+
+  vimt_gaussian_pyramid_builder_2d<float> pyr_builder;
+
+  if (image.image().nplanes()==1)
+  {
+    pyr_builder.build(image_pyr_,image);
+  }
+  else
+  {
+    vimt_image_2d_of<float> grey_image;
+    vil_convert_planes_to_grey(image.image(),grey_image.image());
+    grey_image.set_world2im(image.world2im());
+    pyr_builder.build(image_pyr_,grey_image);
+  }
+}
+
 
 //: Perform search from current position
 void qasm_searcher_widget::search()
