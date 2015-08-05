@@ -398,14 +398,21 @@ void qasm_markup_tool::show_help()
    +tr("Fixed points are shown in red.\n\n")
    +tr("Modes available:\n")
    +tr("Drag:      Drag points or viewport\n")
+   +tr("IntensityWindowing: Drag to change intensity mapping\n")
    +tr("Select:    Select groups of points to move around.\n")
    +tr("DragShape: Use shape model to warp shapes based on\n")
    +tr("           current position of fixed points.\n")
+   +tr("EqualSpace: Click on a point to equally space free points\n")
+   +tr("            along the curve through it. Fixed points unchanged.\n\n")
    +tr("Shortcuts:\n")
    +tr("  F    : First image\n")
    +tr("  Left : Previous image\n")
    +tr("  Right: Next image\n")
-   +tr("  L: Last image\n"));
+   +tr("  L: Last image\n")
+   +tr("  Q/W to adjust centre of intensity window\n")
+   +tr("  E/R to adjust width of intensity window\n")
+   +tr("  S to stretch visible pixels to full intensity range\n")
+   +tr("\nUse left/right arrow keys to move through image set."));
 }
 
 void qasm_markup_tool::save_points_as()
