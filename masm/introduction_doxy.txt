@@ -1,0 +1,5 @@
+// The following text is included in the main documentation page by doxygen
+/*! \mainpage masm Manchester's Active Shape Model library
+ * Includes classes to represent Active Shape Models (masm_model), to 
+ * search with them (masm_searcher) and to build them (masm_builder).
+*/
