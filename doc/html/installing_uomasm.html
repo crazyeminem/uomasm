@@ -54,7 +54,7 @@ git clone git://git.code.sf.net/p/uomasm/code uomasm
 If there is not already a file called CMakeListsLocal.txt within vxl, create one.
 Edit it, adding the line
 <tt><pre>
-SUBDIR(uomasm)
+SUBDIRS(uomasm)
 </pre></tt>
 Then just go into the obj directory and run make.<br>
 This should automatically set up and compile all of uomasm (into the directory obj/uomasm).<br>
@@ -64,8 +64,8 @@ If you wish to compile the ASM GUI tool, you must set the flag: BUILD_UoMASM_QAS
 Note that you must have installed the
 <a href=""http://sourceforge.net/projects/uomqvxl/">UoMqVXL</a> package for this to work. Your CMakeLists.txt file should include the lines:
 <tt><pre>
-SUBDIR(uomqvxl)
-SUBDIR(uomasm)
+SUBDIRS(uomqvxl)
+SUBDIRS(uomasm)
 </pre></tt>
 
 
