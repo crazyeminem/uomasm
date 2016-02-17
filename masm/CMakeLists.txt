@@ -37,7 +37,7 @@ SET(masm_sources
 )
 
 ADD_LIBRARY(masm ${masm_sources} )
-TARGET_LINK_LIBRARIES(masm msm mfpf)
+TARGET_LINK_LIBRARIES(masm msm mfpf vpdfl vimt mbl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil_algo)
 
 # Data for the masm_bldr library, containing the classes to build the models.
 SET(masm_bldr_sources
