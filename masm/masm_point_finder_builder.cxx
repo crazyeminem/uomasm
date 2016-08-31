@@ -23,7 +23,7 @@
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_exception.h>
 
-#include <vsl/vsl_binary_loader.txx>
+#include <vsl/vsl_binary_loader.hxx>
 #include <mbl/mbl_cloneables_factory.h>
 
 //: Indicate the index of this point (may be used to label points or data)
